@@ -6,6 +6,11 @@ meta {
 
 post {
   url: http://localhost:3000/gpt/orthography-check
-  body: none
+  body: formUrlEncoded
   auth: inherit
+}
+
+body:form-urlencoded {
+  prompt: wololoooooo
+  ~maxTokens: 100
 }
