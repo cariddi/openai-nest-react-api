@@ -36,7 +36,12 @@ export const orthographyCheckUseCase = async (
         content: prompt,
       },
     ],
+    max_tokens: 150, // the more tokes you allow, the higher quality the response will be (and the more expensive it is)
+    temperature: 0.3, // between 0 and 2, the higher the temperature is, the more random the response will be
+    response_format: {
+      type: 'json_object',
+    },
   });
 
-  return completion.choices[0];
+  return completion.choices[0].message.content;
 };
