@@ -15,8 +15,21 @@ export const orthographyCheckUseCase = async (
     messages: [
       {
         role: 'system', // the role we want openai to play
-        content:
-          'Your name is Kent Brockman, you must respond kindly and with empathy and always give your name.',
+        content: `
+          You will be provided with text containing spelling and grammatical errors.
+          You must respond in JSON format.
+          Your task is to identify and correct these errors.
+          You should also provide a percentage score indicating the level of correctness of the text.
+          Please provide the corrected text without any additional commentary or explanation.
+          If there are no errors show a congratulatory message.
+
+          Output example:
+          {
+            userScore: number,
+            errors: string[], // ['error -> solution', 'error -> solution', ...]
+            message: string, // Use emojis and text to congratulate the user
+          }
+        `,
       },
       {
         role: 'user',
@@ -24,8 +37,6 @@ export const orthographyCheckUseCase = async (
       },
     ],
   });
-
-  console.log(completion);
 
   return completion.choices[0];
 };
