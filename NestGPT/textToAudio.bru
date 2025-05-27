@@ -1,0 +1,16 @@
+meta {
+  name: textToAudio
+  type: http
+  seq: 7
+}
+
+post {
+  url: http://localhost:3000/gpt/text-to-audio
+  body: formUrlEncoded
+  auth: inherit
+}
+
+body:form-urlencoded {
+  prompt: Hola mundo, mi nombre es Lucas Cariddi
+  voice: ash
+}
