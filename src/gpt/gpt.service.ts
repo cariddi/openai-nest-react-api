@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import OpenAI from 'openai';
 import * as path from 'path';
 import { OrthographyDto, TextToAudioDto, TranslateDto } from './dtos';
+import { AudtioToTextDto } from './dtos/audioToText.dto';
 import { ProsConsDiscusserDto } from './dtos/prosConsDicusser.dto';
 import {
   audioToTextUseCase,
@@ -65,7 +66,12 @@ export class GptService {
     return filePath;
   }
 
-  async audioToText(audioFile: Express.Multer.File, prompt?: string) {
+  async audioToText(
+    audioFile: Express.Multer.File,
+    audtioToTextDto: AudtioToTextDto,
+  ) {
+    const { prompt } = audtioToTextDto;
+
     return await audioToTextUseCase(this.openai, {
       audioFile,
       prompt,
