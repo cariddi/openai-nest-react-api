@@ -1,0 +1,16 @@
+meta {
+  name: audioToText
+  type: http
+  seq: 9
+}
+
+post {
+  url: http://localhost:3000/gpt/audio-to-text
+  body: multipartForm
+  auth: inherit
+}
+
+body:multipart-form {
+  file: @file(/Users/lucascariddi/Desktop/El+parque.m4a)
+  ~prompt: 
+}

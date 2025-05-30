@@ -6,11 +6,16 @@ import {
   Param,
   Post,
   Res,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
+import { diskStorage } from 'multer';
 import { OrthographyDto, TextToAudioDto, TranslateDto } from './dtos';
 import { ProsConsDiscusserDto } from './dtos/prosConsDicusser.dto';
 import { GptService } from './gpt.service';
+import { AudioFileValidationPipe } from './pipes/audio-file-validation.pipe';
 
 @Controller('gpt')
 export class GptController {
@@ -72,5 +77,40 @@ export class GptController {
     res.setHeader('Content-Type', 'audio/mp3');
     res.status(HttpStatus.OK);
     res.sendFile(filePath);
+  }
+
+  @Post('audio-to-text')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './generated/uploads',
+        filename: (req, file, callback) => {
+          const fileExtension = file.originalname.split('.').pop();
+          const fileName = `${new Date().getTime()}.${fileExtension}`;
+
+          return callback(null, fileName);
+        },
+      }),
+    }),
+  )
+  async audioToText(
+    @UploadedFile(
+      new AudioFileValidationPipe(),
+      // TODO: had to create a custom validation pipe since regex for FileTypeValidator did not work
+      // new ParseFilePipe({
+      //   validators: [
+      //     new MaxFileSizeValidator({
+      //       maxSize: 1000 * 10124 * 5,
+      //       message: 'File is bigger than 5mb',
+      //     }),
+      //     new FileTypeValidator({ fileType: 'audio/*' }),
+      //   ],
+      // }),
+    )
+    file: Express.Multer.File,
+  ) {
+    console.log({ file });
+
+    return 'done';
   }
 }
