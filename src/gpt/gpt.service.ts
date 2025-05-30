@@ -5,6 +5,7 @@ import * as path from 'path';
 import { OrthographyDto, TextToAudioDto, TranslateDto } from './dtos';
 import { ProsConsDiscusserDto } from './dtos/prosConsDicusser.dto';
 import {
+  audioToTextUseCase,
   orthographyCheckUseCase,
   prosConsDicusserStreamUseCase,
   prosConsDicusserUseCase,
@@ -62,5 +63,12 @@ export class GptService {
     if (!wasFound) throw new NotFoundException(`File ${filePath} not found`);
 
     return filePath;
+  }
+
+  async audioToText(audioFile: Express.Multer.File, prompt?: string) {
+    return await audioToTextUseCase(this.openai, {
+      audioFile,
+      prompt,
+    });
   }
 }

@@ -109,8 +109,6 @@ export class GptController {
     )
     file: Express.Multer.File,
   ) {
-    console.log({ file });
-
-    return 'done';
+    return await this.gptService.audioToText(file);
   }
 }
