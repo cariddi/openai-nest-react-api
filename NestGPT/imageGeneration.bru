@@ -1,0 +1,15 @@
+meta {
+  name: imageGeneration
+  type: http
+  seq: 10
+}
+
+post {
+  url: http://localhost:3000/gpt/image-generation
+  body: multipartForm
+  auth: inherit
+}
+
+body:multipart-form {
+  prompt: Manten todos los signos de puntuacion y hummss...y ahh...
+}

@@ -14,6 +14,7 @@ import { Response } from 'express';
 import { diskStorage } from 'multer';
 import {
   AudtioToTextDto,
+  ImageGenerationDto,
   OrthographyDto,
   TextToAudioDto,
   TranslateDto,
@@ -104,5 +105,10 @@ export class GptController {
     @Body() audioToTextDto: AudtioToTextDto,
   ) {
     return await this.gptService.audioToText(file, audioToTextDto);
+  }
+
+  @Post('image-generation')
+  async imageGeneration(@Body() imageGenerationDto: ImageGenerationDto) {
+    return await this.gptService.imageGeneration(imageGenerationDto);
   }
 }
