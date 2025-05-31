@@ -6,10 +6,12 @@ meta {
 
 post {
   url: http://localhost:3000/gpt/image-generation
-  body: multipartForm
+  body: formUrlEncoded
   auth: inherit
 }
 
-body:multipart-form {
-  prompt: Manten todos los signos de puntuacion y hummss...y ahh...
+body:form-urlencoded {
+  prompt: Necesito una imagen de un personaje de anime, pero que tenga un sombrero interesante y que sea todo muy mecha
+  ~originalImage: ABC
+  ~maskImage: 123
 }
