@@ -1,4 +1,5 @@
 import OpenAI from 'openai';
+import { downloadImageAsPng } from '../../helpers';
 
 interface Options {
   prompt: string;
@@ -24,10 +25,13 @@ export const imageGenerationUseCase = async (
   });
 
   // TODO: save image in file system
+  const url = response.data?.[0].url;
+
+  await downloadImageAsPng(url!);
   console.log({ response });
 
   return {
-    url: response.data?.[0].url,
+    url,
     localPath: '',
     revised_prompt: response.data?.[0].revised_prompt,
   };
