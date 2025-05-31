@@ -6,5 +6,6 @@ export class AudtioToTextDto {
   readonly prompt: string;
 
   @IsString()
+  @IsOptional()
   readonly lang: string;
 }

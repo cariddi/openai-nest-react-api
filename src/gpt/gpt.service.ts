@@ -70,11 +70,12 @@ export class GptService {
     audioFile: Express.Multer.File,
     audtioToTextDto: AudtioToTextDto,
   ) {
-    const { prompt } = audtioToTextDto;
+    const { prompt, lang } = audtioToTextDto;
 
     return await audioToTextUseCase(this.openai, {
       audioFile,
       prompt,
+      lang,
     });
   }
 }

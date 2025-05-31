@@ -11,6 +11,7 @@ export class AudioFileValidationPipe implements PipeTransform {
 
     const allowedMimeTypes = [
       'audio/mp4',
+      'audio/x-m4a',
       'audio/mpeg',
       'audio/wav',
       'audio/x-wav',
