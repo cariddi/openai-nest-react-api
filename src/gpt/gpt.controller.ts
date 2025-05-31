@@ -99,19 +99,7 @@ export class GptController {
     }),
   )
   async audioToText(
-    @UploadedFile(
-      new AudioFileValidationPipe(),
-      // TODO: had to create a custom validation pipe since regex for FileTypeValidator did not work
-      // new ParseFilePipe({
-      //   validators: [
-      //     new MaxFileSizeValidator({
-      //       maxSize: 1000 * 10124 * 5,
-      //       message: 'File is bigger than 5mb',
-      //     }),
-      //     new FileTypeValidator({ fileType: 'audio/*' }),
-      //   ],
-      // }),
-    )
+    @UploadedFile(new AudioFileValidationPipe())
     file: Express.Multer.File,
     @Body() audioToTextDto: AudtioToTextDto,
   ) {
