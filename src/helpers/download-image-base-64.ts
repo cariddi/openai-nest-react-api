@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import sharp from 'sharp';
+import * as sharp from 'sharp';
 
 export const downloadBase64ImageAsPng = async (
   base64Image: string,
