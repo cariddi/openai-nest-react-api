@@ -1,5 +1,7 @@
+import * as fs from 'fs';
 import OpenAI from 'openai';
-import { downloadImageAsPng } from '../../helpers';
+import * as path from 'path';
+import { downloadBase64ImageAsPng, downloadImageAsPng } from '../../helpers';
 
 interface Options {
   prompt: string;
@@ -7,14 +9,7 @@ interface Options {
   maskImage?: string;
 }
 
-export const imageGenerationUseCase = async (
-  openai: OpenAI,
-  options: Options,
-) => {
-  const { prompt } = options;
-
-  // TODO: verification of originalImage
-
+const getGeneratedImage = async (openai: OpenAI, prompt: string) => {
   const response = await openai.images.generate({
     prompt,
     model: 'dall-e-3',
@@ -25,12 +20,59 @@ export const imageGenerationUseCase = async (
   });
 
   const responseUrl = response.data?.[0].url || '';
+
   // TODO: save image in file system
   const url = await downloadImageAsPng(responseUrl);
 
   return {
-    url,
+    url, // TODO: should be ---> http://localhost:3000/gpt/image-generation/1748735874397.png
     openAIUrl: responseUrl,
     revised_prompt: response.data?.[0].revised_prompt,
   };
+};
+
+const getEditedImage = async (
+  openai: OpenAI,
+  prompt: string,
+  originalImage: string,
+  maskImage: string,
+) => {
+  // originalImage=http://localhost:3000/gpt/image-generation/1748735874397.png
+  // maskImage=Base64;ASDASDdgsfgsfgfghDFSADFDFDAFaDfadgfdagDGDGDASGDAFGADGF
+  const pngImagePath = await downloadImageAsPng(originalImage);
+  const maskPath = await downloadBase64ImageAsPng(maskImage);
+
+  const response = await openai.images.edit({
+    model: 'dall-e-2',
+    prompt,
+    image: fs.createReadStream(pngImagePath),
+    mask: fs.createReadStream(maskPath),
+    n: 1,
+    size: '1024x1024',
+    response_format: 'url',
+  });
+
+  const responseUrl = response.data?.[0].url || '';
+
+  const localImagePath = await downloadImageAsPng(responseUrl);
+  const fileName = path.basename(localImagePath);
+
+  const publicUrl = `localhost:3000/${fileName}`;
+
+  return {
+    url: publicUrl,
+    openAIUrl: responseUrl,
+    revised_prompt: response.data?.[0].revised_prompt,
+  };
+};
+
+export const imageGenerationUseCase = async (
+  openai: OpenAI,
+  options: Options,
+) => {
+  const { prompt, originalImage, maskImage } = options;
+  const isNotEdit = !originalImage || !maskImage;
+
+  if (isNotEdit) return await getGeneratedImage(openai, prompt);
+  return await getEditedImage(openai, prompt, originalImage, maskImage);
 };
