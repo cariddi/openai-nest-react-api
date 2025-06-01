@@ -1,0 +1,15 @@
+meta {
+  name: imageVariation
+  type: http
+  seq: 11
+}
+
+post {
+  url: http://localhost:3000/gpt/image-variation
+  body: formUrlEncoded
+  auth: inherit
+}
+
+body:form-urlencoded {
+  baseImage: http://localhost:3000/gpt/image-generation/1748799968052.png
+}

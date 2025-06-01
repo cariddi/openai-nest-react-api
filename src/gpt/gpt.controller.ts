@@ -15,11 +15,12 @@ import { diskStorage } from 'multer';
 import {
   AudtioToTextDto,
   ImageGenerationDto,
+  ImageVariationDto,
   OrthographyDto,
   TextToAudioDto,
   TranslateDto,
 } from './dtos';
-import { ProsConsDiscusserDto } from './dtos/prosConsDicusser.dto';
+import { ProsConsDiscusserDto } from './dtos/pros-cons-dicusser.dto';
 import { GptService } from './gpt.service';
 import { AudioFileValidationPipe } from './pipes/audio-file-validation.pipe';
 
@@ -121,5 +122,10 @@ export class GptController {
 
     res.status(HttpStatus.OK);
     res.sendFile(filePath);
+  }
+
+  @Post('image-variation')
+  async imageVariation(@Body() imageVariationDto: ImageVariationDto) {
+    return await this.gptService.imageVariation(imageVariationDto);
   }
 }
