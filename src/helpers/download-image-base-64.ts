@@ -2,7 +2,10 @@ import * as fs from 'fs';
 import * as path from 'path';
 import sharp from 'sharp';
 
-export const downloadBase64ImageAsPng = async (base64Image: string) => {
+export const downloadBase64ImageAsPng = async (
+  base64Image: string,
+  returnFullPath: boolean | undefined = false,
+) => {
   // Remove header
   base64Image = base64Image.split(';base64,').pop()!;
   const imageBuffer = Buffer.from(base64Image, 'base64');
@@ -16,5 +19,5 @@ export const downloadBase64ImageAsPng = async (base64Image: string) => {
   // Transform to RGBA, png // OpenAI expected format
   await sharp(imageBuffer).png().ensureAlpha().toFile(fullPath);
 
-  return imageNamePng;
+  return returnFullPath ? fullPath : imageNamePng;
 };

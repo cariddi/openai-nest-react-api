@@ -3,7 +3,10 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as sharp from 'sharp';
 
-export const downloadImageAsPng = async (url: string) => {
+export const downloadImageAsPng = async (
+  url: string,
+  returnFullPath: boolean | undefined = false,
+) => {
   const response = await fetch(url);
 
   if (!response.ok)
@@ -18,5 +21,5 @@ export const downloadImageAsPng = async (url: string) => {
   const fullPath = path.join(folderPath, imageNamePng);
   await sharp(buffer).png().ensureAlpha().toFile(fullPath);
 
-  return imageNamePng;
+  return returnFullPath ? fullPath : imageNamePng;
 };
