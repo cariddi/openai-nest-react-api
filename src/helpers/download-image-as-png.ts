@@ -18,5 +18,5 @@ export const downloadImageAsPng = async (url: string) => {
   const fullPath = path.join(folderPath, imageNamePng);
   await sharp(buffer).png().ensureAlpha().toFile(fullPath);
 
-  return fullPath;
+  return imageNamePng;
 };

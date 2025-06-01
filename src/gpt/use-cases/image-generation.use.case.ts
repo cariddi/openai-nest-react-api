@@ -1,6 +1,5 @@
 import * as fs from 'fs';
 import OpenAI from 'openai';
-import * as path from 'path';
 import { downloadBase64ImageAsPng, downloadImageAsPng } from '../../helpers';
 
 interface Options {
@@ -18,14 +17,14 @@ const getGeneratedImage = async (openai: OpenAI, prompt: string) => {
     quality: 'standard',
     response_format: 'url',
   });
-
   const responseUrl = response.data?.[0].url || '';
 
   // TODO: save image in file system
-  const url = await downloadImageAsPng(responseUrl);
+  const fileName = await downloadImageAsPng(responseUrl);
+  const url = `${process.env.SERVER_URL}/gpt/image-generation/${fileName}`;
 
   return {
-    url, // TODO: should be ---> http://localhost:3000/gpt/image-generation/1748735874397.png
+    url,
     openAIUrl: responseUrl,
     revised_prompt: response.data?.[0].revised_prompt,
   };
@@ -51,16 +50,13 @@ const getEditedImage = async (
     size: '1024x1024',
     response_format: 'url',
   });
-
   const responseUrl = response.data?.[0].url || '';
 
-  const localImagePath = await downloadImageAsPng(responseUrl);
-  const fileName = path.basename(localImagePath);
-
-  const publicUrl = `localhost:3000/${fileName}`;
+  const fileName = await downloadImageAsPng(responseUrl);
+  const url = `${process.env.SERVER_URL}/gpt/image-generation/${fileName}`;
 
   return {
-    url: publicUrl,
+    url,
     openAIUrl: responseUrl,
     revised_prompt: response.data?.[0].revised_prompt,
   };
