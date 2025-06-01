@@ -24,15 +24,13 @@ export const imageGenerationUseCase = async (
     response_format: 'url',
   });
 
+  const responseUrl = response.data?.[0].url || '';
   // TODO: save image in file system
-  const url = response.data?.[0].url;
-
-  await downloadImageAsPng(url!);
-  console.log({ response });
+  const url = await downloadImageAsPng(responseUrl);
 
   return {
     url,
-    localPath: '',
+    openAIUrl: responseUrl,
     revised_prompt: response.data?.[0].revised_prompt,
   };
 };
