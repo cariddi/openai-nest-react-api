@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import OpenAI from 'openai';
+import OpenAI, { toFile } from 'openai';
 import { downloadBase64ImageAsPng, downloadImageAsPng } from '../../helpers';
 
 interface Options {
@@ -44,8 +44,12 @@ const getEditedImage = async (
   const response = await openai.images.edit({
     model: 'dall-e-2',
     prompt,
-    image: fs.createReadStream(pngImagePath),
-    mask: fs.createReadStream(maskPath),
+    image: await toFile(fs.createReadStream(pngImagePath), null, {
+      type: 'image/png',
+    }), // fs.createReadStream(pngImagePath),
+    mask: await toFile(fs.createReadStream(maskPath), null, {
+      type: 'image/png',
+    }), // fs.createReadStream(maskPath),
     n: 1,
     size: '1024x1024',
     response_format: 'url',
