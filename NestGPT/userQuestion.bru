@@ -1,0 +1,16 @@
+meta {
+  name: userQuestion
+  type: http
+  seq: 13
+}
+
+post {
+  url: http://localhost:3000/assistant/user-question
+  body: formUrlEncoded
+  auth: inherit
+}
+
+body:form-urlencoded {
+  threadId: ABC
+  question: Hello World
+}
