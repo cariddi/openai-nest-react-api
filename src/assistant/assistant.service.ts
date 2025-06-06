@@ -3,7 +3,12 @@ import * as fs from 'fs';
 import OpenAI from 'openai';
 import * as path from 'path';
 import { QuestionDto } from './dto/question.dto';
-import { createMessageUseCase, createRunUseCase } from './use-cases';
+import {
+  checkCompleteStatusUseCase,
+  createMessageUseCase,
+  createRunUseCase,
+  getMessageListUseCase,
+} from './use-cases';
 import { createThreadUseCase } from './use-cases/create-thread.use.case';
 
 @Injectable()
@@ -89,5 +94,16 @@ export class AssistantService {
     });
 
     console.log({ run, message });
+
+    if (!run) return;
+
+    await checkCompleteStatusUseCase(this.openai, {
+      runId: run.id,
+      threadId,
+    });
+
+    const messages = await getMessageListUseCase(this.openai, { threadId });
+
+    return messages.reverse();
   }
 }
