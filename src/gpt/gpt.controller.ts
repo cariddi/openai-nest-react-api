@@ -14,6 +14,7 @@ import { Response } from 'express';
 import { diskStorage } from 'multer';
 import {
   AudtioToTextDto,
+  ExtractTextFromImageDto,
   ImageGenerationDto,
   ImageVariationDto,
   OrthographyDto,
@@ -22,7 +23,7 @@ import {
 } from './dtos';
 import { ProsConsDiscusserDto } from './dtos/pros-cons-dicusser.dto';
 import { GptService } from './gpt.service';
-import { AudioFileValidationPipe } from './pipes/audio-file-validation.pipe';
+import { AudioFileValidationPipe, ImageFileValidationPipe } from './pipes';
 
 @Controller('gpt')
 export class GptController {
@@ -127,5 +128,27 @@ export class GptController {
   @Post('image-variation')
   async imageVariation(@Body() imageVariationDto: ImageVariationDto) {
     return await this.gptService.imageVariation(imageVariationDto);
+  }
+
+  @Post('extract-text-from-image')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './generated/uploads',
+        filename: (req, file, callback) => {
+          const fileExtension = file.originalname.split('.').pop();
+          const fileName = `${new Date().getTime()}.${fileExtension}`;
+
+          return callback(null, fileName);
+        },
+      }),
+    }),
+  )
+  async extractTextFromImage(
+    @UploadedFile(new ImageFileValidationPipe())
+    file: Express.Multer.File,
+    @Body() extractTextFromImageDto: ExtractTextFromImageDto,
+  ) {
+    return await this.gptService.imageToText(file, extractTextFromImageDto);
   }
 }

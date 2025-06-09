@@ -1,4 +1,5 @@
 export * from './audio-to-text.dto';
+export * from './extract-text-from-image.dto';
 export * from './image-generation.dto';
 export * from './image-variation.dto';
 export * from './orthography.dto';

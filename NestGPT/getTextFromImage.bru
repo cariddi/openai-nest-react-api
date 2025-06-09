@@ -1,0 +1,16 @@
+meta {
+  name: getTextFromImage
+  type: http
+  seq: 15
+}
+
+post {
+  url: http://localhost:3000/gpt/extract-text-from-image
+  body: multipartForm
+  auth: inherit
+}
+
+body:multipart-form {
+  file: @file(/Users/lucascariddi/Desktop/1581804-tesla-model-y-2022.webp)
+  prompt: Tell me the brand and model
+}

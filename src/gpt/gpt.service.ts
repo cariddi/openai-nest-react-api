@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import OpenAI from 'openai';
 import * as path from 'path';
 import {
+  ExtractTextFromImageDto,
   ImageGenerationDto,
   ImageVariationDto,
   OrthographyDto,
@@ -14,6 +15,7 @@ import { ProsConsDiscusserDto } from './dtos/pros-cons-dicusser.dto';
 import {
   audioToTextUseCase,
   imageGenerationUseCase,
+  imageToTextUseCase,
   imageVariationUseCase,
   orthographyCheckUseCase,
   prosConsDicusserStreamUseCase,
@@ -110,6 +112,18 @@ export class GptService {
   async imageVariation(imageVariationDto: ImageVariationDto) {
     return await imageVariationUseCase(this.openai, {
       ...imageVariationDto,
+    });
+  }
+
+  async imageToText(
+    imageFile: Express.Multer.File,
+    extractTextFromImageDto: ExtractTextFromImageDto,
+  ) {
+    const { prompt } = extractTextFromImageDto;
+
+    return await imageToTextUseCase(this.openai, {
+      imageFile,
+      prompt,
     });
   }
 }
