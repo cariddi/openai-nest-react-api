@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import OpenAI, { toFile } from 'openai';
-import { downloadBase64ImageAsPng, downloadImageAsPng } from '../../helpers';
+import { downloadBase64ImageAsPng, downloadImageAsPng } from '../../../helpers';
 
 interface Options {
   prompt: string;
