@@ -16,7 +16,7 @@ export const checkCompleteStatusUseCase = async (
     runId,
   );
 
-  if ((runStatusObject.status = 'completed')) {
+  if (runStatusObject.status === 'completed') {
     return runStatusObject;
   }
 

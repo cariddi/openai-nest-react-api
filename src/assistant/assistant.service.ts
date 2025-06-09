@@ -83,7 +83,7 @@ export class AssistantService {
   }
 
   async userQuestion({ threadId, question }: QuestionDto) {
-    const message = await createMessageUseCase(this.openai, {
+    await createMessageUseCase(this.openai, {
       threadId,
       question,
     });
