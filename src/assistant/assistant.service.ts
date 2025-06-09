@@ -93,8 +93,6 @@ export class AssistantService {
       assistantId: this.assistantId!,
     });
 
-    console.log({ run, message });
-
     if (!run) return;
 
     await checkCompleteStatusUseCase(this.openai, {

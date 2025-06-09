@@ -12,8 +12,6 @@ export const getMessageListUseCase = async (
 
   const messageList = await openai.beta.threads.messages.list(threadId);
 
-  console.log({ messageList });
-
   const messages = messageList.data.map((messageData) => ({
     role: messageData.role,
     content: messageData.content.map((c) => (c as any).text.value),
